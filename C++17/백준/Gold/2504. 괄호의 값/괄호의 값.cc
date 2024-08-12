@@ -1,57 +1,39 @@
 #include<iostream>
 #include<stack>
 using namespace std;
-int ans;
+int ans[35];
 string s;
-stack<char> st, op;
+stack<char> st;
+void f(int k) {
+	int sz = st.size();
+	if (ans[sz] == 0) {
+		ans[sz] = k;
+	}
+	else {
+		ans[sz] *= k;
+	}
+	st.pop();
+	ans[sz - 1] += ans[sz];
+	ans[sz] = 0;
+}
+
 int main() {
 	cin >> s;
-	int par = 1;
 	for (int i = 0; i < s.length(); i++) {
-		if (s[i] == ')') {
-			if (st.empty() || st.top() != '(') {
-				cout << 0;
-				return 0;
-			}
-			if (s[i-1] == '(') {
-				ans += par;
-				par /= 2;
-				st.pop();
-			}
-			else {
-				par /= 2;
-				st.pop();
-			}
+		if (s[i] == '(' || s[i] == '[') {
+			st.push(s[i]);
 		}
-		else if (s[i] == ']') {
-			if (st.empty() || st.top() != '[') {
-				cout << 0;
-				return 0;
-			}
-			if (s[i-1] == '[') {
-				ans += par;
-				par /= 3;
-				st.pop();
-			}
-			else {
-				par /= 3;
-				st.pop();
-			}
+		else if (s[i] == ')' && !st.empty() && st.top() == '(') {
+			f(2);
 		}
-		else if (s[i] == '(') {
-			par *= 2;
-			st.push('(');
+		else if (s[i] == ']' && !st.empty() && st.top() == '[') {
+			f(3);
 		}
-		else if (s[i] == '[') {
-			par *= 3;
-			st.push('[');
+		else {
+			cout << 0;
+			return 0;
 		}
-			
 	}
-	if (!st.empty()) {
-		cout << 0;
-		return 0;
-	}
-	cout << ans;
+	cout << ans[0];
 	return 0;
 }

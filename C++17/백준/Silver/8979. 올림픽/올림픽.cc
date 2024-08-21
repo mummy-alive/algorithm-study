@@ -5,7 +5,7 @@ typedef struct PR {
 	int g, s, b, con;
 } PR;
 int n, k;
-PR arr[505];
+PR arr[1005];
 bool cmp(PR x, PR y) {
 	if (x.g == y.g) {
 		if (x.s == y.s)

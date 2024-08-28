@@ -9,14 +9,10 @@ int main() {
 		cin >> arr[i];
 
 	for (int i = 0; i < n; i++) {
-		
 		int pos = lower_bound(par, par + ln, arr[i]) - par;
+		par[pos] = arr[i];
 		if (pos == ln) {
-			par[ln] = arr[i];
 			ln++;
-		}
-		else {
-			par[pos] = arr[i];
 		}
 	}
 	cout << ln;

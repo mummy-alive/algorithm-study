@@ -1,32 +1,28 @@
-#include <iostream>
 #include<vector>
 using namespace std;
+int r, c;
+int arr[1005][1005] = {0};
+int f(int k){
+    for(int i=k; i<=r; i++){
+        for(int j=k; j<=c; j++){
+            int par = arr[i][j] - arr[i][j-k] - arr[i-k][j] + arr[i-k][j-k];
+            if (par == k*k)
+                return true;
+         }
+    }    
+    return false;
+}
 
-int solution(vector<vector<int>> board)
-{
-    int answer = 0;
-    int sum[1005][1005]={0};
-    int r = board.size();
-    int c = board[0].size();
-    
-    
-    for(int i=1; i<=r; i++){
-        for(int j=1; j<=c;j++){
-            if(board[i-1][j-1]) answer= 1;
-            sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + board[i-1][j-1];
-        }
-    }
-    for(int i=1; i<=r; i++){
+int solution(vector<vector<int>> board) {
+    r = board.size(), c = board[0].size();
+    for(int i=1;i<=r; i++){
         for(int j=1; j<=c; j++){
-            if(!board[i-1][j-1]) continue;
-            for(int k=answer; k <= min(r, c); k++) {
-                if (i+k-1 > r || j+k-1 > c) break;
-                int par = sum[i+k-1][j+k-1] - sum[i+k-1][j-1] - sum[i-1][j+k-1] + sum[i-1][j-1];
-                if (par == k*k)
-                    answer = max(answer, k);
-            }
+            arr[i][j] = arr[i-1][j]+arr[i][j-1] - arr[i-1][j-1] + board[i-1][j-1];
         }
     }
-    
-    return answer*answer;
+    for(int k=1; ;k++){
+        if(!f(k))
+            return (k-1)*(k-1);
+    }
+    return 0;
 }

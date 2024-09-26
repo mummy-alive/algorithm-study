@@ -1,37 +1,38 @@
 #include <string>
-#include <sstream>
 #include <vector>
-#include <algorithm>
+#include <sstream>
+#include <set>
+
 using namespace std;
 
 vector<int> solution(vector<string> operations) {
     vector<int> answer;
-    vector<int> vt;
-    for(auto st: operations){
-        stringstream ss(st);
-        char s;
-        int n;
-        ss >> s >> n;
-        if(s == 'I'){
-            vt.push_back(n);
-            sort(vt.begin(), vt.end());
-        }
-        else if (s=='D'){
-            if(vt.size() == 0 ) continue;
-            if (n == 1)
-                vt.erase(vt.begin()+int(vt.size())-1);
-            else 
-                vt.erase(vt.begin());
-            sort(vt.begin(), vt.end());
+    multiset<int> mt;
+    for(auto x: operations){
+        stringstream ss(x);
+        char ch;
+        int p;
+        ss >> ch >> p;
+        if(ch=='I') {
+            mt.insert(p);
+        }   
+        else {
+            if(mt.size()==0) continue;
+            if(p==1) {
+                mt.erase(--mt.end());
+            }
+            else {
+                mt.erase(mt.begin());
+            }
         }
     }
-    if(vt.size() == 0){
+    if(mt.size()==0){
         answer.push_back(0);
         answer.push_back(0);
     }
     else{
-        answer.push_back(vt[vt.size()-1]);
-        answer.push_back(vt[0]);
+        answer.push_back(*mt.rbegin());
+        answer.push_back(*mt.begin());
     }
     return answer;
 }
